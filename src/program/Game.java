@@ -37,7 +37,7 @@ public class Game {
     }
 
     private static void showPersonHand(Person person) {
-        System.out.print(person.getName() + "'s hand: ");
+        System.out.print(person.getName() + "'s hand: \n");
 
         // If showing dealer's hand AND he only has two cards
         if(person instanceof Dealer && person.getHand().size() == 2){
@@ -51,7 +51,7 @@ public class Game {
             for (Card cardInHand : person.getHand()) {      
                 System.out.print(cardInHand.toString() + " ");
             }
-            System.out.print("(Total: " + person.getSumOfHand() + ") \n");
+            System.out.print("(Total: " + person.getSumOfHand() + ") \n\n");
         }
 
     }
