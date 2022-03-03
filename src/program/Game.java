@@ -7,6 +7,7 @@ import card.*;
 import players.*;
 
 public class Game {
+    static Scanner input = new Scanner(System.in); // Scanner that will be used to read input
 
     static ArrayList<Card> deck;    // The deck that will be used through the round
     static Dealer dealer;           // The dealer
@@ -14,9 +15,7 @@ public class Game {
     static int playerAmount = 1;    // The amount of players, not counting the dealer
 
     private static Player createPlayer(){
-        Scanner input = new Scanner(System.in);
         Player p = new Player(input.nextLine());
-        input.close();
         return p;
     }
 
