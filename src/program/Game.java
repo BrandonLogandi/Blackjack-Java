@@ -10,15 +10,15 @@ public class Game {
     static ArrayList<Card> deck;    // The deck that will be used through the round
     static Dealer dealer;           // The dealer
     static Person[] players;        // The list of players
-    static int playerAmount = 1;    // The amount of players, not counting with the dealer
+    static int playerAmount = 1;    // The amount of players, not counting the dealer
 
     private static ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<Card>();   // Create a new deck for cards to be added into
 
         // Create cards with all suits and values by using every suit and value possible
-        for(Suit face:Suit.values())
+        for(Suit suit:Suit.values())
             for(Value value:Value.values())
-                deck.add(new Card(face, value));
+                deck.add(new Card(suit, value));
 
         return deck;
     }
