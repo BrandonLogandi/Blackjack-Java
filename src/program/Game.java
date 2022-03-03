@@ -1,6 +1,7 @@
 package program;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import card.*;
 import players.*;
@@ -11,6 +12,13 @@ public class Game {
     static Dealer dealer;           // The dealer
     static Person[] players;        // The list of players
     static int playerAmount = 1;    // The amount of players, not counting the dealer
+
+    private static Player createPlayer(){
+        Scanner input = new Scanner(System.in);
+        Player p = new Player(input.nextLine());
+        input.close();
+        return p;
+    }
 
     private static ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<Card>();   // Create a new deck for cards to be added into
@@ -75,9 +83,9 @@ public class Game {
         dealer = new Dealer("Dealer");
         players = new Person[playerAmount + 1];
 
-        // TODO Ask for player names
         for (int i = 0; i < players.length - 1; i++) {
-            players[i] = new Player("Player " + (i+1));
+            System.out.print("Input player " + (i+1) + " name: ");
+            players[i] = createPlayer();
         }
         players[players.length - 1] = dealer;
 
