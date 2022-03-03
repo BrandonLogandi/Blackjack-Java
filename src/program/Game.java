@@ -12,7 +12,9 @@ public class Game {
     static ArrayList<Card> deck;    // The deck that will be used through the round
     static Dealer dealer;           // The dealer
     static Person[] players;        // The list of players
+
     static int playerAmount = 1;    // The amount of players, not counting the dealer
+    static int dealerStandOn = 17;  // The amount of points the dealer must reach or surpass before they stop hitting
 
     private static Player createPlayer(){
         Player p = new Player(input.nextLine());
@@ -68,13 +70,22 @@ public class Game {
             
             switch (args[i]) {
                 case "--playerAmount":
-
-                    if (args[i+1].equals("0")) 
+                    int parsePlayerAmount = Integer.parseInt(args[i+1]);
+                    if (parsePlayerAmount == 0) 
                         throw new Exception("Player amount cannot be 0");
-                    playerAmount = Integer.parseInt(args[i+1]);
 
+                    playerAmount = parsePlayerAmount;
                     ignoreNextArg = true;
-                    break;     
+                    break; 
+
+                case "--dealerStandOn":
+                    int parseDealerStandOn = Integer.parseInt(args[i+1]);
+                    if (parseDealerStandOn > 21 || parseDealerStandOn <= 0) 
+                        throw new Exception("Invalid dealer points stand value");
+
+                    dealerStandOn = parseDealerStandOn;
+                    ignoreNextArg = true;
+                    break;   
             }
         }
 
