@@ -1,18 +1,11 @@
-## Getting Started
+# Blackjack in Java
+Yep, you heard it right: a~~nother~~ Blackjack game written in Java!
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Why?
+Since i hadn't done anything with Java since summer vacation, i've decided to create a little personal project to get the rust off my brain. But also as an excuse to test out Git and VS Code.
 
-## Folder Structure
+## Progress
+The only thing implemented as of March/3/2022 is card dealing. No actual game logic is implemented yet.
 
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Can i contribute?
+Sure, go ahead and fork the repo, then make a pull request [here.](https://github.com/BrandonLogandi/Blackjack-Java/compare)
