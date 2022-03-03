@@ -13,9 +13,13 @@ public class Card {
     public Suit getSuit(){
         return suit;
     }
+    
+    public String getWrittenValue() {
+        return value.getWrittenValue();
+    }
 
-    public Value getValue() {
-        return value;
+    public int getNumericValue() {
+        return value.getNumericValue();
     }
 
     @Override

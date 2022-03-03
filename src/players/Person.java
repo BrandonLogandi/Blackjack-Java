@@ -15,7 +15,7 @@ public abstract class Person {
     public int getSumOfHand() {
         int sum = 0;
         for (Card card : hand) {
-            sum += card.getValue().getRawValue();
+            sum += card.getNumericValue();
         }
         return sum;
     }

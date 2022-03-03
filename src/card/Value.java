@@ -16,18 +16,18 @@ public enum Value {
     K ("King", 10);
 
     private String writtenValue;
-    private int rawValue;
+    private int numericValue;
 
-    Value(String writtenValue, int rawValue){
+    Value(String writtenValue, int numericValue){
         this.writtenValue = writtenValue;
-        this.rawValue = rawValue;
+        this.numericValue = numericValue;
     }
 
     public String getWrittenValue() {
         return writtenValue;
     }
 
-    public int getRawValue() {
-        return rawValue;
+    public int getNumericValue() {
+        return numericValue;
     }
 }
