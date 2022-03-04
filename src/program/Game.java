@@ -11,9 +11,9 @@ public class Game {
 
     static ArrayList<Card> deck;    // The deck that will be used through the round
     static Dealer dealer;           // The dealer
-    static Person[] players;        // The list of players
+    static Player[] players;        // The list of players
 
-    static int playerAmount = 1;    // The amount of players, not counting the dealer
+    static int playerAmount = 1;    // The amount of players
     static int dealerStandOn = 17;  // The amount of points the dealer must reach or surpass before they stop hitting
 
     private static Player createPlayer(){
@@ -91,13 +91,12 @@ public class Game {
 
         deck = createDeck();
         dealer = new Dealer("Dealer");
-        players = new Person[playerAmount + 1];
+        players = new Player[playerAmount];
 
-        for (int i = 0; i < players.length - 1; i++) {
+        for (int i = 0; i < players.length; i++) {
             System.out.print("Input player " + (i+1) + " name: ");
             players[i] = createPlayer();
         }
-        players[players.length - 1] = dealer;
 
         for(int i = 0; i < 2; i++){
             for (Person p : players) { // Give a card to every player in the game
@@ -105,9 +104,72 @@ public class Game {
                 showPersonHand(p);
             }
 
+            addCardToHand(dealer);
+            showPersonHand(dealer);
+
         }
 
-        // TODO Gameplay logic
+        for (Person p : players) {
+
+            if (p.getSumOfHand() == 21) {
+                System.out.println("Blackjack for " + p.getName() + "!");
+                continue;
+            }
+
+            boolean stop = false;
+
+            do {
+                System.out.println(p.getName() + ", what do you want to do?\n1 - Hit, 2 - Stand");
+
+                switch (Integer.parseInt(input.nextLine())) {
+                    case 1:
+                        addCardToHand(p);
+                        showPersonHand(p);
+
+                        if (p.getSumOfHand() == 21) { // If player has 21 points, don't let them hit anymore
+                            System.out.println("21! Just what you needed");
+                            stop = true;
+                        } else if (p.getSumOfHand() > 21) { // If player has gone over 21, they lose
+                            System.out.println("Over 21! You bust");
+                            stop = true;
+                        }
+
+                        break;
+
+                    case 2:
+                        System.out.println(p.getName() + " stands");
+                        stop = true;
+                        break;
+                
+                    default:
+                        break;
+                }
+
+            } while (!stop);
+        }
+
+        // Dealer plays after everybody else
+        System.out.println("Dealer has " + dealer.getSumOfHand());
+
+        if (dealer.getSumOfHand() == 21) {
+            System.out.println("Blackjack for the dealer!");
+        } else {
+            // Dealer will keep hitting until they reach or surpass "dealerStandOn"
+            while (dealer.getSumOfHand() < dealerStandOn) {
+                addCardToHand(dealer);
+                showPersonHand(dealer);
+            }
+        }
+
+        for (Player p : players) {
+            if (p.getSumOfHand() > dealer.getSumOfHand()) {
+                System.out.println(p.getName() + " wins against the dealer!");
+            } else if (p.getSumOfHand() == dealer.getSumOfHand()) {
+                System.out.println(p.getName() + " pushe!");
+            } else{
+                System.out.println(p.getName() + " loses!");
+            }
+        }
 
     }
 
