@@ -131,6 +131,7 @@ public class Game {
                             stop = true;
                         } else if (p.getSumOfHand() > 21) { // If player has gone over 21, they lose
                             System.out.println("Over 21! You bust");
+                            p.setBusted(true);
                             stop = true;
                         }
 
@@ -154,19 +155,29 @@ public class Game {
         if (dealer.getSumOfHand() == 21) {
             System.out.println("Blackjack for the dealer!");
         } else {
-            // Dealer will keep hitting until they reach or surpass "dealerStandOn"
+            // Dealer will keep hitting until they reach or surpass "dealerStandOn" or until they bust
             while (dealer.getSumOfHand() < dealerStandOn) {
                 addCardToHand(dealer);
                 showPersonHand(dealer);
+
+                if (dealer.getSumOfHand() > 21) {
+                    System.out.println("Dealer busts!");
+                    dealer.setBusted(true);
+                    break;
+                }
             }
         }
 
+        // Results
         for (Player p : players) {
-            if (p.getSumOfHand() > dealer.getSumOfHand()) {
+            if (p.getBusted()) {
+                System.out.println(p.getName() + " loses!");
+
+            } else if (p.getSumOfHand() > dealer.getSumOfHand() || dealer.getBusted()) {
                 System.out.println(p.getName() + " wins against the dealer!");
             } else if (p.getSumOfHand() == dealer.getSumOfHand()) {
-                System.out.println(p.getName() + " pushe!");
-            } else{
+                System.out.println(p.getName() + " pushes!");
+            } else {
                 System.out.println(p.getName() + " loses!");
             }
         }
