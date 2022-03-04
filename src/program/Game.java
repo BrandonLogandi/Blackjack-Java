@@ -71,8 +71,8 @@ public class Game {
             switch (args[i]) {
                 case "--playerAmount":
                     int parsePlayerAmount = Integer.parseInt(args[i+1]);
-                    if (parsePlayerAmount == 0) 
-                        throw new Exception("Player amount cannot be 0");
+                    if (parsePlayerAmount <= 0) 
+                        throw new Exception("Invalid player amount");
 
                     playerAmount = parsePlayerAmount;
                     ignoreNextArg = true;
