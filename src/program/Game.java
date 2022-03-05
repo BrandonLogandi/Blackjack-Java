@@ -80,6 +80,9 @@ public class Game {
                 case "--forceShowDealerHand": // Always show dealer's hand, without hiding his second card
                     forceShowDealerHand = true;
                     break;
+
+                default:
+                    throw new Exception("Invalid argument " + args[i]);
             }
         }
 
