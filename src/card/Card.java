@@ -13,6 +13,10 @@ public class Card {
     public Suit getSuit(){
         return suit;
     }
+
+    public Value getValue() {
+        return value;
+    }
     
     public String getWrittenValue() {
         return value.getWrittenValue();

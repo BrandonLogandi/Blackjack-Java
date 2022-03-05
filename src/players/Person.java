@@ -31,7 +31,11 @@ public abstract class Person {
     public int getSumOfHand() {
         int sum = 0;
         for (Card card : hand) {
-            sum += card.getNumericValue();
+            if (card.getValue().equals(Value.ACE) && (sum + Value.ACE.getNumericValue()) > 21) {
+                sum += 1;
+            } else {
+                sum += card.getNumericValue();
+            }
         }
         return sum;
     }
