@@ -206,13 +206,17 @@ public class Game {
         for (Player p : players) {
             if (p.getBusted()) {
                 System.out.println(p.getName() + " loses!");
+                p.incrementLoses();
 
             } else if (p.getSumOfHand() > dealer.getSumOfHand() || dealer.getBusted()) {
                 System.out.println(p.getName() + " wins against the dealer!");
+                p.incrementWins();
             } else if (p.getSumOfHand() == dealer.getSumOfHand()) {
                 System.out.println(p.getName() + " pushes!");
+                p.incrementPushes();
             } else {
                 System.out.println(p.getName() + " loses!");
+                p.incrementLoses();
             }
         }
 
@@ -222,7 +226,12 @@ public class Game {
                 newGame();
                 break;
             case "n":
-                System.out.println("Thank you for playing!");
+                // Show wins, loses and pushes for every player, then quit
+                System.out.println("Final results:");
+                for (Person p : players) 
+                    System.out.println(p.getName() + ": " + p.getWins() + "W " + p.getLoses() + "L " + p.getPushes() + "P");
+
+                System.out.println("Thanks for playing!");
                 System.exit(0);
         }
     }
