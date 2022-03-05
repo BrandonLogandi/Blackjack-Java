@@ -14,4 +14,4 @@ You can pass the following arguments when launching the game through a command l
 
 `--dealerStandOn x` Changes the amount of points the dealer must reach or surpass before they stop hitting to `x`. **Default: 17**  
 
-`--forceShowDealerHand` Forces the dealer to always show their full hand, without hinding their second card.
+`--forceShowDealerHand` Forces the dealer to always show their full hand, without hiding their second card.
