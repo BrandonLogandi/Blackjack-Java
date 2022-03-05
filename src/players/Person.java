@@ -6,7 +6,7 @@ import card.*;
 
 public abstract class Person {
     private String name;
-    private ArrayList<Card> hand = new ArrayList<Card>();
+    private ArrayList<Card> hand;
     private boolean busted = false;
 
     public Person(String name){
