@@ -40,20 +40,10 @@ public class Game {
     private static void showPersonHand(Person person) {
         System.out.print(person.getName() + "'s hand: \n");
 
-        // If showing dealer's hand AND he only has two cards
-        if(person instanceof Dealer && person.getHand().size() == 2){
-            // Get first card and show it, but not the second
-            Card firstCard = person.getHand().get(0);
-            System.out.print(firstCard.toString() + " ???? ");
-            System.out.print("(Total: ???) \n");
+        for (Card cardInHand : person.getHand()) {      
+            System.out.print(cardInHand.toString() + " // ");
         }
-        // If not, show all cards in hand
-        else{
-            for (Card cardInHand : person.getHand()) {      
-                System.out.print(cardInHand.toString() + " ");
-            }
-            System.out.print("(Total: " + person.getSumOfHand() + ") \n\n");
-        }
+        System.out.print("(Total: " + person.getSumOfHand() + ") \n\n");
 
     }
 
@@ -98,14 +88,18 @@ public class Game {
             players[i] = createPlayer();
         }
 
-        for(int i = 0; i < 2; i++){
+        for(int turn = 1; turn < 3; turn++){
             for (Person p : players) { // Give a card to every player in the game
                 addCardToHand(p);
                 showPersonHand(p);
             }
 
             addCardToHand(dealer);
-            showPersonHand(dealer);
+            if (turn == 2) {
+                System.out.println(dealer.getHand().get(0).toString() + " ????");
+            } else {
+                showPersonHand(dealer);
+            }
 
         }
 
