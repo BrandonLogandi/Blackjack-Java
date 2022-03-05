@@ -15,6 +15,7 @@ public class Game {
 
     static int playerAmount = 1;    // The amount of players
     static int dealerStandOn = 17;  // The amount of points the dealer must reach or surpass before they stop hitting
+    static boolean forceShowDealerHand = false; // Whether to always show dealer's hand without hiding cards
 
     private static Player createPlayer(){
         Player p = new Player(input.nextLine());
@@ -76,6 +77,9 @@ public class Game {
                     dealerStandOn = parseDealerStandOn;
                     ignoreNextArg = true;
                     break;   
+                case "--forceShowDealerHand": // Always show dealer's hand, without hiding his second card
+                    forceShowDealerHand = true;
+                    break;
             }
         }
 
@@ -96,7 +100,11 @@ public class Game {
 
             addCardToHand(dealer);
             if (turn == 2) {
-                System.out.println(dealer.getHand().get(0).toString() + " ????");
+                if (forceShowDealerHand) {
+                    showPersonHand(dealer);
+                } else {
+                    System.out.println("Dealer's hand \n" + dealer.getHand().get(0).toString() + " ????");
+                }
             } else {
                 showPersonHand(dealer);
             }
