@@ -86,8 +86,14 @@ public class Game {
 
         // Run each game phase
         dealStartingHand();
-        playersPlay();
-        dealerPlay();
+        
+        if (dealer.getSumOfHand() != 21) {  // If dealer did not get a blackjack, let players play
+            playersTurn();
+            dealersTurn();
+        } else {
+            System.out.println("Blackjack for the dealer!");
+        }
+
         showResults();
     }
 
@@ -187,19 +193,15 @@ public class Game {
     private static void dealerPlay() {
         System.out.println("Dealer has " + dealer.getSumOfHand());
 
-        if (dealer.getSumOfHand() == 21) {
-            System.out.println("Blackjack for the dealer!");
-        } else {
-            // Dealer will keep hitting until they reach or surpass "dealerStandOn" or until they bust
-            while (dealer.getSumOfHand() < dealerStandOn) {
-                addCardToHand(dealer);
-                showPersonHand(dealer);
+        // Dealer will keep hitting until they reach or surpass "dealerStandOn" or until they bust
+        while (dealer.getSumOfHand() < dealerStandOn) {
+            addCardToHand(dealer);
+            showPersonHand(dealer);
 
-                if (dealer.getSumOfHand() > 21) {
-                    System.out.println("Dealer busts!");
-                    dealer.setBusted(true);
-                    break;
-                }
+            if (dealer.getSumOfHand() > 21) {
+                System.out.println("Dealer busts!");
+                dealer.setBusted(true);
+                break;
             }
         }
     }
