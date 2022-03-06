@@ -1,3 +1,6 @@
 *.class
 bin/
 launch4j/
+launch4j_config.xml
+Blackjack-Java.jar
+Blackjack-Java.exe
