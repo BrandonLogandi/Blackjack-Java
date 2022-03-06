@@ -69,6 +69,7 @@ public class Game {
 
     private static void newGame() {
         // Reset all player's hands
+        clearScreen();
         for (Person p : players) {
             p.resetHand();
             p.setBusted(false);
@@ -234,6 +235,14 @@ public class Game {
 
                 System.out.println("Thanks for playing!");
                 System.exit(0);
+        }
+    }
+
+    private static void clearScreen() {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (Exception e) {
+            
         }
     }
 
