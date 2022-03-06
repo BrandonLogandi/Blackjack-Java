@@ -75,6 +75,7 @@ public class Game {
         }
 
         dealer.resetHand();
+        dealer.setBusted(false);
 
         // If current deck is halfway depleted, make a new one
         if (deck.size() < 26) {
