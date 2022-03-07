@@ -1,20 +1,18 @@
-package players;
+package player;
 
 import java.util.ArrayList;
 
 import card.*;
 
-public abstract class Person {
+public class Player {
     private String name;
-    private ArrayList<Card> hand;
+    private ArrayList<Card> hand = new ArrayList<Card>();
 
     // Game states
     private boolean busted = false;
-    private int wins;
-    private int loses;
-    private int pushes;
+    private int wins, losses, pushes;
 
-    public Person(String name){
+    public Player(String name) {
         this.name = name;
     }
 
@@ -26,9 +24,10 @@ public abstract class Person {
         return hand;
     }
 
-    public boolean getBusted(){
+    public boolean getBusted() {
         return busted;
     }
+
     public void setBusted(boolean busted) {
         this.busted = busted;
     }
@@ -38,7 +37,7 @@ public abstract class Person {
     }
 
     public int getLoses() {
-        return loses;
+        return losses;
     }
 
     public int getPushes() {
@@ -49,12 +48,25 @@ public abstract class Person {
         wins++;
     }
 
-    public void incrementLoses() {
-        loses++;
+    public void incrementLosses() {
+        losses++;
     }
 
     public void incrementPushes() {
         pushes++;
+    }
+
+    public void addCardToHand(Card c) {
+        hand.add(c);
+    }
+
+    public void showHand() {
+        System.out.print(name + "'s hand: \n");
+
+        for (Card cardInHand : hand) {
+            System.out.print(cardInHand.toString() + " // ");
+        }
+        System.out.print("(Total: " + getSumOfHand() + ") \n\n");
     }
 
     public int getSumOfHand() {
@@ -69,7 +81,8 @@ public abstract class Person {
         return sum;
     }
 
-    public void resetHand(){
-        hand = new ArrayList<Card>();
+    public void reset() {
+        hand.clear();
+        setBusted(false);
     }
 }

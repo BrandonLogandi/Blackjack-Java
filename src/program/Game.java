@@ -1,16 +1,15 @@
 package program;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import card.*;
-import players.*;
+import player.*;
 
 public class Game {
     static Scanner input = new Scanner(System.in); // Scanner that will be used to read input
 
-    static ArrayList<Card> deck; // The deck that will be used through the round
-    static Dealer dealer; // The dealer
+    static Deck deck; // The deck that will be used through the round
+    static Player dealer; // The dealer
     static Player[] players; // The list of players
 
     static int playerAmount = 1; // The amount of players
@@ -20,8 +19,8 @@ public class Game {
     public static void main(String[] args) throws Exception {
         commandLineArguments(args);
 
-        deck = createDeck();
-        dealer = new Dealer("Dealer");
+        deck = new Deck();
+        dealer = new Player("Dealer");
         players = new Player[playerAmount];
         createPlayer();
 
@@ -32,7 +31,6 @@ public class Game {
         boolean ignoreNextArg = false; // Next argument is the value of previous argument, so ignore it
 
         for (int i = 0; i < args.length; i++) {
-
             if (ignoreNextArg) {
                 ignoreNextArg = false;
                 continue;
@@ -57,37 +55,33 @@ public class Game {
                     ignoreNextArg = true;
                     break;
 
-                case "--forceShowDealerHand": // Always show dealer's hand, without hiding his second card
+                case "--forceShowDealerHand": // Always show dealer's full hand, without hiding his second card
                     forceShowDealerHand = true;
                     break;
 
                 default:
-                    throw new Exception("Invalid argument " + args[i]);
+                    System.out.println("Invalid argument " + args[i]);
             }
         }
     }
 
     private static void newGame() {
-        // Reset all player's hands
         clearScreen();
-        for (Person p : players) {
-            p.resetHand();
-            p.setBusted(false);
+
+        // Reset all players
+        for (Player p : players) {
+            p.reset();
         }
-
-        dealer.resetHand();
-        dealer.setBusted(false);
-
-        // If current deck is halfway depleted, make a new one
+        dealer.reset();
+    
+        // If current deck is halfway depleted, reshuffle
         if (deck.size() < 26) {
-            System.out.println("Shuffling deck!");
-            deck = createDeck();
+            deck.reset();
         }
 
-        // Run each game phase
         dealStartingHand();
-        
-        if (dealer.getSumOfHand() != 21) {  // If dealer did not get a blackjack, let players play
+
+        if (dealer.getSumOfHand() != 21) { // If dealer did not get a blackjack, let players play
             playersTurn();
             dealersTurn();
         } else {
@@ -95,17 +89,6 @@ public class Game {
         }
 
         showResults();
-    }
-
-    private static ArrayList<Card> createDeck() {
-        ArrayList<Card> deck = new ArrayList<Card>(); // Create a new deck for cards to be added into
-
-        // Create cards with all suits and values by using every suit and value possible
-        for (Suit suit : Suit.values())
-            for (Value value : Value.values())
-                deck.add(new Card(suit, value));
-
-        return deck;
     }
 
     private static void createPlayer() {
@@ -117,43 +100,28 @@ public class Game {
 
     private static void dealStartingHand() {
         for (int turn = 1; turn < 3; turn++) {
-            for (Person p : players) { // Give a card to every player in the game
-                addCardToHand(p);
-                showPersonHand(p);
+            for (Player p : players) { // Give a card to every player in the game
+                p.addCardToHand(deck.deal());
+                p.showHand();
             }
 
             // Give a card to the dealer and show his hand
-            addCardToHand(dealer);
+            dealer.addCardToHand(deck.deal());
             if (turn == 2) {
                 if (forceShowDealerHand) {
-                    showPersonHand(dealer);
+                    dealer.showHand();
                 } else {
                     System.out.println("Dealer's hand \n" + dealer.getHand().get(0).toString() + " ????");
                 }
             } else {
-                showPersonHand(dealer);
+                dealer.showHand();
             }
 
         }
     }
 
-    private static void addCardToHand(Person person) {
-        Card card = dealer.dealCard(deck); // Gets a new card from the deck
-        person.getHand().add(card); // Adds that card to the person's hand
-    }
-
-    private static void showPersonHand(Person person) {
-        System.out.print(person.getName() + "'s hand: \n");
-
-        for (Card cardInHand : person.getHand()) {
-            System.out.print(cardInHand.toString() + " // ");
-        }
-        System.out.print("(Total: " + person.getSumOfHand() + ") \n\n");
-
-    }
-
-    private static void playersPlay() {
-        for (Person p : players) {
+    private static void playersTurn() {
+        for (Player p : players) {
 
             if (p.getSumOfHand() == 21) {
                 System.out.println("Blackjack for " + p.getName() + "!");
@@ -162,18 +130,17 @@ public class Game {
 
             boolean stop = false;
             do {
-                System.out.print(p.getName() + ", what do you want to do?\n[1 - Hit, 2 - Stand]:");
-
+                System.out.print(p.getName() + ", what do you want to do?\n[1 - Hit, 2 - Stand]: ");
                 switch (Integer.parseInt(input.nextLine())) {
                     case 1:
-                        addCardToHand(p);
-                        showPersonHand(p);
+                        p.addCardToHand(deck.deal());
+                        p.showHand();
 
                         if (p.getSumOfHand() == 21) { // If player has 21 points, don't let them hit anymore
-                            System.out.println("21! Just what you needed");
+                            System.out.println("21! Just what you needed\n");
                             stop = true;
                         } else if (p.getSumOfHand() > 21) { // If player has gone over 21, they lose
-                            System.out.println("Over 21! You bust");
+                            System.out.println("Over 21! You bust\n");
                             p.setBusted(true);
                             stop = true;
                         }
@@ -181,7 +148,7 @@ public class Game {
                         break;
 
                     case 2:
-                        System.out.println(p.getName() + " stands");
+                        System.out.println(p.getName() + " stands\n");
                         stop = true;
                         break;
                 }
@@ -190,13 +157,13 @@ public class Game {
         }
     }
 
-    private static void dealerPlay() {
-        System.out.println("Dealer has " + dealer.getSumOfHand());
+    private static void dealersTurn() {
+        dealer.showHand();
 
         // Dealer will keep hitting until they reach or surpass "dealerStandOn" or until they bust
         while (dealer.getSumOfHand() < dealerStandOn) {
-            addCardToHand(dealer);
-            showPersonHand(dealer);
+            dealer.addCardToHand(deck.deal());
+            dealer.showHand();
 
             if (dealer.getSumOfHand() > 21) {
                 System.out.println("Dealer busts!");
@@ -210,7 +177,7 @@ public class Game {
         for (Player p : players) {
             if (p.getBusted()) {
                 System.out.println(p.getName() + " loses!");
-                p.incrementLoses();
+                p.incrementLosses();
 
             } else if (p.getSumOfHand() > dealer.getSumOfHand() || dealer.getBusted()) {
                 System.out.println(p.getName() + " wins against the dealer!");
@@ -220,7 +187,7 @@ public class Game {
                 p.incrementPushes();
             } else {
                 System.out.println(p.getName() + " loses!");
-                p.incrementLoses();
+                p.incrementLosses();
             }
         }
 
@@ -230,10 +197,11 @@ public class Game {
                 newGame();
                 break;
             case "n":
-                // Show wins, loses and pushes for every player, then quit
-                System.out.println("Final results:");
-                for (Person p : players) 
-                    System.out.println(p.getName() + ": " + p.getWins() + "W " + p.getLoses() + "L " + p.getPushes() + "P");
+                // Show wins, losses and pushes for every player, then quit
+                System.out.println("\nFinal results:");
+                for (Player p : players)
+                    System.out.println(
+                            p.getName() + ": " + p.getWins() + "W " + p.getLoses() + "L " + p.getPushes() + "P");
 
                 System.out.println("Thanks for playing!");
                 System.exit(0);
@@ -244,7 +212,7 @@ public class Game {
         try {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         } catch (Exception e) {
-            
+
         }
     }
 
