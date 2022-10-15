@@ -1,4 +1,4 @@
-package card;
+package com.example.card;
 
 public enum Value {
     ACE ("Ace", 11),

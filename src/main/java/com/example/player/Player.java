@@ -1,16 +1,20 @@
-package player;
+package com.example.player;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import card.*;
+import com.example.card.*;
 
 public class Player {
+
     private String name;
-    private ArrayList<Card> hand = new ArrayList<Card>();
+    private List<Card> hand = new ArrayList<>();
 
     // Game states
     private boolean busted = false;
-    private int wins, losses, pushes;
+    private int wins;
+    private int losses;
+    private int pushes;
 
     public Player(String name) {
         this.name = name;
@@ -20,11 +24,11 @@ public class Player {
         return name;
     }
 
-    public ArrayList<Card> getHand() {
+    public List<Card> getHand() {
         return hand;
     }
 
-    public boolean getBusted() {
+    public boolean isBusted() {
         return busted;
     }
 
@@ -63,20 +67,19 @@ public class Player {
     public void showHand() {
         System.out.print(name + "'s hand: \n");
 
-        for (Card cardInHand : hand) {
+        for (Card cardInHand : hand) 
             System.out.print(cardInHand.toString() + " // ");
-        }
+        
         System.out.print("(Total: " + getSumOfHand() + ") \n\n");
     }
 
     public int getSumOfHand() {
         int sum = 0;
         for (Card card : hand) {
-            if (card.getValue().equals(Value.ACE) && (sum + Value.ACE.getNumericValue()) > 21) {
+            if (card.getValue().equals(Value.ACE) && (sum + 11) > 21) 
                 sum += 1;
-            } else {
+            else 
                 sum += card.getNumericValue();
-            }
         }
         return sum;
     }

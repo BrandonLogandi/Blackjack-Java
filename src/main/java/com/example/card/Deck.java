@@ -1,4 +1,4 @@
-package card;
+package com.example.card;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,32 +6,29 @@ import java.util.List;
 
 public class Deck {
 
-    private List<Card> deck;
+    private List<Card> cards;
 
     public Deck() {
-        deck = new ArrayList<Card>();
+        cards = new ArrayList<>();
         reset();
     }
 
     public Card deal() {
-        Card c = deck.get(0);
-        deck = deck.subList(1, deck.size());
-
-        return c;
+        return cards.remove(0);
     }
 
     public void reset() {
         System.out.println("Shuffling deck!");
-        deck.clear();
+        cards.clear();
         for (Suit suit : Suit.values())
             for (Value value : Value.values())
-                deck.add(new Card(suit, value));
+                cards.add(new Card(suit, value));
 
-        Collections.shuffle(deck);
+        Collections.shuffle(cards);
     }
 
     public int size() {
-        return deck.size();
+        return cards.size();
     }
     
 }

@@ -1,11 +1,12 @@
-package program;
+package com.example;
 
 import java.util.Scanner;
 
-import card.*;
-import player.*;
+import com.example.card.*;
+import com.example.player.Player;
 
 public class Game {
+
     static Scanner input = new Scanner(System.in); // Scanner that will be used to read input
 
     static Deck deck; // The deck that will be used through the round
@@ -22,7 +23,7 @@ public class Game {
         deck = new Deck();
         dealer = new Player("Dealer");
         players = new Player[playerAmount];
-        createPlayer();
+        createPlayers();
 
         newGame();
     }
@@ -65,19 +66,25 @@ public class Game {
         }
     }
 
+    private static void createPlayers() {
+        for (int i = 0; i < playerAmount; i++) {
+            System.out.print("Input player " + (i + 1) + " name: ");
+            players[i] = new Player(input.nextLine());
+        }
+    }
+
     private static void newGame() {
         clearScreen();
 
         // Reset all players
-        for (Player p : players) {
+        for (Player p : players) 
             p.reset();
-        }
+
         dealer.reset();
     
         // If current deck is halfway depleted, reshuffle
-        if (deck.size() < 26) {
+        if (deck.size() < 26) 
             deck.reset();
-        }
 
         dealStartingHand();
 
@@ -91,15 +98,8 @@ public class Game {
         showResults();
     }
 
-    private static void createPlayer() {
-        for (int i = 0; i < playerAmount; i++) {
-            System.out.print("Input player " + (i + 1) + " name: ");
-            players[i] = new Player(input.nextLine());
-        }
-    }
-
     private static void dealStartingHand() {
-        for (int turn = 1; turn < 3; turn++) {
+        for (int i = 1; i < 3; i++) {
             for (Player p : players) { // Give a card to every player in the game
                 p.addCardToHand(deck.deal());
                 p.showHand();
@@ -107,12 +107,8 @@ public class Game {
 
             // Give a card to the dealer and show his hand
             dealer.addCardToHand(deck.deal());
-            if (turn == 2) {
-                if (forceShowDealerHand) {
-                    dealer.showHand();
-                } else {
-                    System.out.println("Dealer's hand \n" + dealer.getHand().get(0).toString() + " ????");
-                }
+            if (i == 2 && !forceShowDealerHand) {
+                System.out.println("Dealer's hand \n" + dealer.getHand().get(0).toString() + " ????");
             } else {
                 dealer.showHand();
             }
@@ -146,10 +142,11 @@ public class Game {
                         }
 
                         break;
-
                     case 2:
                         System.out.println(p.getName() + " stands\n");
                         stop = true;
+                        break;
+                    default:
                         break;
                 }
 
@@ -175,11 +172,10 @@ public class Game {
 
     private static void showResults() {
         for (Player p : players) {
-            if (p.getBusted()) {
+            if (p.isBusted()) {
                 System.out.println(p.getName() + " loses!");
                 p.incrementLosses();
-
-            } else if (p.getSumOfHand() > dealer.getSumOfHand() || dealer.getBusted()) {
+            } else if (p.getSumOfHand() > dealer.getSumOfHand() || dealer.isBusted()) {
                 System.out.println(p.getName() + " wins against the dealer!");
                 p.incrementWins();
             } else if (p.getSumOfHand() == dealer.getSumOfHand()) {
@@ -204,7 +200,8 @@ public class Game {
                             p.getName() + ": " + p.getWins() + "W " + p.getLoses() + "L " + p.getPushes() + "P");
 
                 System.out.println("Thanks for playing!");
-                System.exit(0);
+                break;
+            default:
         }
     }
 

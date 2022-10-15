@@ -1,4 +1,4 @@
-package card;
+package com.example.card;
 
 public class Card {
 
@@ -28,7 +28,7 @@ public class Card {
 
     @Override
     public String toString() {
-        return value.getWrittenValue() + " of " + suit.getSuit();
+        return value.getWrittenValue() + " of " + suit.getSuitValue();
     }
 
 }
